@@ -6,6 +6,7 @@
         <li><router-link to="/">Home</router-link></li>
         <li><router-link to="/about">Over</router-link></li>
         <li><router-link to="/contact">Contact</router-link></li>
+        <li><router-link to="/users">Gebruikers</router-link></li>
         <li><router-link to="/register">Register</router-link></li>
       </ul>
     </div>
