@@ -1,0 +1,53 @@
+/* Algemeen */
+nav {
+    background-color: #333; /* Donkere achtergrondkleur */
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-end;
+}
+
+nav ul li {
+    float: left;
+}
+
+nav ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    background-color: #04AA6D; /* Hover-kleur */
+    color: white;
+}
+
+/* Stijlen voor actieve link */
+nav ul li a.active {
+    background-color: #04AA6D;
+    color: white;
+}
+
+/* Responsive voor kleinere schermen */
+@media screen and (max-width: 768px) {
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li a {
+        padding: 10px;
+    }
+}
