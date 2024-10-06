@@ -6,6 +6,7 @@ import '@/assets/base.css';
 import '@/assets/main.css';
 import './assets/register.css';
 import './assets/navbar.css';
+import './assets/login.css';
 
 createApp(App)
     .use(router)
