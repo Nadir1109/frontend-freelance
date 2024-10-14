@@ -1,4 +1,4 @@
-name: Build and Analyze Vue.js project
+name: Build
 
 on:
   push:
@@ -6,30 +6,34 @@ on:
       - main
 
 jobs:
-  sonarqube:
+  build:
+    name: Build and analyze
     runs-on: ubuntu-latest
 
     steps:
-    - name: Check out the code
-      uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '16'
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # Zorg ervoor dat dit overeenkomt met de versie van Node.js die je gebruikt
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Run Tests and generate coverage
-      run: npm run test
+      - name: Install Vue CLI
+        run: npm install -g @vue/cli
 
-    - name: Run SonarQube scan
-      run: |
-        npm install --save-dev sonarqube-scanner
-        npx sonarqube-scanner \
-          -Dsonar.projectKey=your_project_key \
-          -Dsonar.sources=src \
+      - name: Run Tests and generate coverage
+        run: npm run test
+
+      - name: SonarQube Scan
+        run: |
+          sonar-scanner \
+          -Dsonar.projectKey=je_project_key \
+          -Dsonar.sources=. \
           -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
