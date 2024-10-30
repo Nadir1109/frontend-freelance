@@ -52,7 +52,7 @@ export default {
   methods: {
     fetchUsers() {
       // Haal de gebruikers op via de API
-      fetch("http://localhost:8080/api/users") // Pas de URL aan naar jouw backend API
+      fetch("http://localhost:8080/api/user") // Pas de URL aan naar jouw backend API
           .then(response => response.json())
           .then(data => {
             this.users = data; // Sla de gebruikers op in de data
@@ -68,7 +68,7 @@ export default {
     },
     saveUser(id) {
       // API-aanroep om de gebruiker bij te werken
-      fetch(`http://localhost:8080/api/users/${id}`, {
+      fetch(`http://localhost:8080/api/user/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export default {
     deleteUser(id) {
       // Verwijder de gebruiker via de API en werk de lijst bij
       if (confirm("Weet je zeker dat je deze gebruiker wilt verwijderen?")) {
-        fetch(`http://localhost:8080/api/users/${id}`, {
+        fetch(`http://localhost:8080/api/user/${id}`, {
           method: "DELETE",
         })
             .then(() => {
