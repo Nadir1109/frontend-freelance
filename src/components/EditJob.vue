@@ -4,20 +4,41 @@
     <form @submit.prevent="updateJob">
       <div>
         <label>Titel:</label>
-        <input v-model="job.title" type="text" required />
+        <input
+            v-model="job.title"
+            type="text"
+            maxlength="40"
+            required
+            placeholder="Maximaal 40 karakters"
+        />
       </div>
+
       <div>
         <label>Budget:</label>
-        <input v-model="job.budget" type="number" required />
+        <input
+            v-model.number="job.budget"
+            type="number"
+            min="0"
+            step="1"
+            required
+        />
       </div>
+
       <div>
         <label>Deadline:</label>
-        <input v-model="job.deadline" type="date" required />
+        <input
+            v-model="job.deadline"
+            type="date"
+            :min="today"
+            required
+        />
       </div>
+
       <div>
         <label>Beschrijving:</label>
-        <textarea v-model="job.description"></textarea>
+        <textarea v-model="job.description" required></textarea>
       </div>
+
       <button type="submit" class="save-button">Opslaan</button>
     </form>
   </div>
@@ -34,7 +55,8 @@ export default {
         budget: 0,
         deadline: '',
         description: ''
-      }
+      },
+      today: new Date().toISOString().split('T')[0] // Alleen toekomstgerichte datums
     };
   },
   mounted() {
@@ -60,3 +82,27 @@ export default {
   }
 };
 </script>
+
+<style>
+.edit-page-container {
+  padding: 20px;
+  text-align: center;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+.save-button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #388E3C;
+}
+</style>
