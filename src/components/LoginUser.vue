@@ -37,14 +37,18 @@ export default {
           },
           body: JSON.stringify(this.userData)
         });
+
         if (response.ok) {
           const data = await response.json();
           this.message = 'Login successful!';
 
-          // Sla de gebruiker of token op in localStorage voor sessiebeheer
+          // Sla de naam, rol, en token op in localStorage
           localStorage.setItem('authToken', data.token || "dummyToken");
+          localStorage.setItem('name', data.name);
+          localStorage.setItem('email', data.email);
+          localStorage.setItem('role', data.role);
 
-          // Navigeer naar de homepage
+          // Navigeer naar de homepage of opdrachtenpagina
           this.$router.push('/');
         } else {
           this.message = 'Login failed. Please check your credentials.';
