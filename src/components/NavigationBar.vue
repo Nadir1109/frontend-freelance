@@ -12,7 +12,7 @@
         <li class="nav-item"><router-link to="/about" class="nav-link">Over</router-link></li>
         <li class="nav-item"><router-link to="/contact" class="nav-link">Contact</router-link></li>
         <li class="nav-item"><router-link to="/jobs" class="nav-link">Opdrachten</router-link></li>
-        <li class="nav-item"><router-link to="/users" class="nav-link">Gebruikers</router-link></li>
+        <li class="nav-item"><router-link to="/register" class="nav-link">Register</router-link></li>
       </ul>
     </div>
   </nav>
