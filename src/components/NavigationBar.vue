@@ -9,10 +9,9 @@
       </button>
       <ul :class="['nav-menu', { 'nav-menu-active': isMenuActive }]">
         <li class="nav-item"><router-link to="/" class="nav-link">Home</router-link></li>
-        <li class="nav-item"><router-link to="/about" class="nav-link">Over</router-link></li>
-        <li class="nav-item"><router-link to="/contact" class="nav-link">Contact</router-link></li>
         <li class="nav-item"><router-link to="/jobs" class="nav-link">Opdrachten</router-link></li>
-        <li class="nav-item"><router-link to="/register" class="nav-link">Register</router-link></li>
+        <li class="nav-item" v-if="!isLoggedIn"><router-link to="/login" class="nav-link">Login</router-link></li>
+        <li class="nav-item" v-if="isLoggedIn"><a @click="logout" class="nav-link">Logout</a></li>
       </ul>
     </div>
   </nav>
@@ -23,18 +22,12 @@ export default {
   data() {
     return {
       isMenuActive: false,
-      isLoggedIn: false
+      isLoggedIn: !!localStorage.getItem('authToken') // Check of de gebruiker is ingelogd
     };
-  },
-  mounted() {
-    this.checkLoginStatus();
   },
   methods: {
     toggleMenu() {
       this.isMenuActive = !this.isMenuActive;
-    },
-    checkLoginStatus() {
-      this.isLoggedIn = !!localStorage.getItem('authToken');
     },
     logout() {
       localStorage.removeItem('authToken');
@@ -43,9 +36,8 @@ export default {
     }
   },
   watch: {
-
     '$route'() {
-      this.checkLoginStatus();
+      this.isLoggedIn = !!localStorage.getItem('authToken');
     }
   }
 };
