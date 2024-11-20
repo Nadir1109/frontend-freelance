@@ -9,33 +9,82 @@
     </div>
     <div v-else>
       <p>Log in om uw gegevens te bekijken.</p>
+      <button @click="redirectToLogin">Ga naar inloggen</button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from '@/axios'; // Gebruik de geconfigureerde Axios-instantie
+
 export default {
   data() {
     return {
       userName: '',
       userEmail: '',
-      userRole: ''
+      userRole: '',
+      isLoggedIn: false, // Boolean om inlogstatus te controleren
     };
   },
-  computed: {
-    isLoggedIn() {
-      return !!this.userName && !!this.userRole && !!this.userEmail;
-    }
+  methods: {
+    redirectToLogin() {
+      // Redirect de gebruiker naar de login-pagina
+      this.$router.push('/login');
+    },
+    async fetchUserInfo() {
+      try {
+        // Controleer of de gebruiker is ingelogd
+        const token = localStorage.getItem('authToken'); // Haal het token op uit localStorage
+        if (!token) {
+          this.isLoggedIn = false;
+          return;
+        }
+
+        // Voeg token toe aan Axios headers
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+        // Haal gebruikersinformatie op via de backend
+        const response = await axios.get('/auth/me');
+        const data = response.data;
+
+        // Zet de opgehaalde gegevens in de state
+        this.userName = data.name || 'Onbekend';
+        this.userEmail = data.email || 'Onbekend';
+        this.userRole = data.role || 'Onbekend';
+        this.isLoggedIn = true; // Markeer gebruiker als ingelogd
+      } catch (error) {
+        console.error('Fout bij ophalen gebruikersinfo:', error);
+        this.isLoggedIn = false; // Markeer gebruiker als uitgelogd bij een fout
+      }
+    },
   },
   mounted() {
-    // Haal gegevens op uit localStorage wanneer de component wordt geladen
-    this.userName = localStorage.getItem('name') || '';
-    this.userEmail = localStorage.getItem('email') || '';
-    this.userRole = localStorage.getItem('role') || '';
-  }
+    // Haal informatie op wanneer de component geladen wordt
+    this.fetchUserInfo();
+  },
+  watch: {
+    // Monitor routewijzigingen en haal informatie opnieuw op
+    $route(to, from) {
+      if (to.name === 'Home') {
+        this.fetchUserInfo();
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
 /* Voeg hier je eigen styling toe */
+button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #218838;
+}
 </style>

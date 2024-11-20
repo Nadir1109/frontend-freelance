@@ -13,12 +13,21 @@ const routes = [
     { path: '/add-job', name: 'AddJob', component: AddJob },
     { path: '/jobs/:id/edit', name: 'EditJob', component: EditJob },
     { path: '/edit/:id', name: 'EditUser', component: EditUser },
-    { path: '/login', name: 'Login', component: LoginUser },
-    { path: '/register', name: 'Register', component: RegisterUser }
+    { path: '/login', name: 'Login', component: LoginUser, meta: { requiresGuest: true } },
+    { path: '/register', name: 'Register', component: RegisterUser, meta: { requiresGuest: true } }
 ];
+
 const router = createRouter({
     history: createWebHistory(),
     routes
+});
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('authToken'); // Controleer of een token bestaat
+    if (to.meta.requiresGuest && token) {
+        next({ name: 'Home' }); // Redirect naar Home als gebruiker al is ingelogd
+    } else {
+        next(); // Ga verder
+    }
 });
 
 export default router;

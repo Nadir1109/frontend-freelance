@@ -1,67 +1,52 @@
 <template>
   <div>
-    <h2>User Login</h2>
-    <form @submit.prevent="loginUser">
+    <h1>Inloggen</h1>
+    <form @submit.prevent="login">
       <div>
-        <label for="email">Email:</label>
-        <input type="email" v-model="userData.email" required />
+        <label>Email:</label>
+        <input type="email" v-model="email" required />
       </div>
       <div>
-        <label for="password">Password:</label>
-        <input type="password" v-model="userData.password" required />
+        <label>Wachtwoord:</label>
+        <input type="password" v-model="password" required />
       </div>
-      <button type="submit">Login</button>
+      <button type="submit">Inloggen</button>
     </form>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="error">{{ error }}</p>
   </div>
 </template>
 
 <script>
+import axios from '@/axios'; // Gebruik je geconfigureerde Axios-instantie
+
 export default {
   data() {
     return {
-      userData: {
-        email: '',
-        password: ''
-      },
-      message: ''
+      email: '',
+      password: '',
+      error: '',
     };
   },
   methods: {
-    async loginUser() {
+    async login() {
       try {
-        const response = await fetch('http://localhost:8080/api/auth/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(this.userData)
+        const response = await axios.post('/auth/login', {
+          email: this.email,
+          password: this.password,
         });
 
-        if (response.ok) {
-          const data = await response.json();
-          this.message = 'Login successful!';
-
-          // Sla de naam, rol, en token op in localStorage
-          localStorage.setItem('authToken', data.token || "dummyToken");
-          localStorage.setItem('name', data.name);
-          localStorage.setItem('email', data.email);
-          localStorage.setItem('role', data.role);
-
-          // Navigeer naar de homepage of opdrachtenpagina
-          this.$router.push('/');
+        // Controleer of er een token in de response zit en sla het op
+        if (response.data.token) {
+          localStorage.setItem('authToken', response.data.token);
+          this.$router.push('/'); // Stuur de gebruiker naar de homepage
         } else {
-          this.message = 'Login failed. Please check your credentials.';
+          this.error = 'Inloggen mislukt: geen token ontvangen.';
         }
       } catch (error) {
-        console.error(error);
-        this.message = 'An error occurred. Please try again.';
+        console.error('Login error:', error.response?.data || error);
+        this.error = error.response?.data?.error || 'Inloggen mislukt. Controleer je gegevens.';
       }
-    }
-  }
+    },
+  },
 };
 </script>
-
-<style scoped>
-/* Voeg hier je eigen styling toe */
-</style>
