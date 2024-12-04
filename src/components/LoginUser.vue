@@ -35,12 +35,17 @@ export default {
           password: this.password,
         });
 
-        // Controleer of er een token in de response zit en sla het op
-        if (response.data.token) {
+        // Controleer of er een token en rol in de response zit
+        if (response.data.token && response.data.role) {
+          // Sla token en rol op in localStorage
           localStorage.setItem('authToken', response.data.token);
-          this.$router.push('/'); // Stuur de gebruiker naar de homepage
+          localStorage.setItem('userRole', response.data.role); // Voeg de rol toe
+          localStorage.setItem('userEmail', response.data.email); // Optioneel: sla e-mail op voor identificatie
+
+          // Verwijs naar de homepage of een specifieke pagina
+          this.$router.push('/jobs');
         } else {
-          this.error = 'Inloggen mislukt: geen token ontvangen.';
+          this.error = 'Inloggen mislukt: geen geldige gegevens ontvangen.';
         }
       } catch (error) {
         console.error('Login error:', error.response?.data || error);

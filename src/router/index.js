@@ -22,11 +22,17 @@ const router = createRouter({
     routes
 });
 router.beforeEach((to, from, next) => {
-    const token = localStorage.getItem('authToken'); // Controleer of een token bestaat
-    if (to.meta.requiresGuest && token) {
-        next({ name: 'Home' }); // Redirect naar Home als gebruiker al is ingelogd
+    const token = localStorage.getItem('authToken');
+    const userRole = localStorage.getItem('userRole');
+
+    if (to.name === 'AddJob' && userRole !== 'CLIENT') {
+        alert('Alleen clients mogen jobs toevoegen.');
+        next({ name: 'JobsView' });
+    } else if (to.name === 'EditJob' && userRole !== 'CLIENT') {
+        alert('Alleen clients mogen jobs bewerken.');
+        next({ name: 'JobsView' });
     } else {
-        next(); // Ga verder
+        next();
     }
 });
 

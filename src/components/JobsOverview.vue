@@ -3,32 +3,49 @@
     <h1 class="title">Available Jobs</h1>
 
     <!-- Plus icon to add new job -->
-    <div class="add-job-container" @click="goToAddJobPage">
+    <div v-if="isClient" class="add-job-container" @click="goToAddJobPage">
       <img src="@/assets/img/plus-icon.png" alt="Add Job" class="add-job-icon" />
       <span class="add-job-text">Nieuwe Job Toevoegen</span>
     </div>
 
     <div class="jobs-container">
       <div v-for="job in jobs" :key="job.id" class="job-card">
-        <div class="edit-icon" @click="goToEditJobPage(job.id)">✏️</div>
+        <!-- Bewerk icoon alleen tonen als ingelogde gebruiker de eigenaar is -->
+        <div
+            v-if="job.userEmail === loggedInUserEmail"
+            class="edit-icon"
+            @click="goToEditJobPage(job.id)"
+        >
+          ✏️
+        </div>
         <h2>{{ job.title }}</h2>
         <p><strong>Budget:</strong> ${{ job.budget }}</p>
         <p><strong>Deadline:</strong> {{ new Date(job.deadline).toLocaleDateString() }}</p>
         <p>{{ job.description }}</p>
-        <button class="more-info-button" @click="showJobDetails(job.id)">Meer Informatie</button>
-        <button class="respond-job-button" @click="respondToJob(job.id)">Reageer op Job</button>
+        <p><strong>Gemaakt door:</strong> {{ job.userName }} ({{ job.userEmail }})</p>
+        <button class="more-info-button" @click="showJobDetails(job.id)">
+          Meer Informatie
+        </button>
+        <button
+            v-if="!isClient"
+            class="respond-job-button"
+            @click="respondToJob(job.id)"
+        >
+          Reageer op Job
+        </button>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import axios from "@/plugins/axios.js";
 
 export default {
   data() {
     return {
-      jobs: []
+      jobs: [],
+      loggedInUserEmail: localStorage.getItem("userEmail"), // Haal ingelogde gebruiker op
+      isClient: localStorage.getItem("userRole") === "CLIENT", // Controleer of de gebruiker een client is
     };
   },
   mounted() {
@@ -39,30 +56,38 @@ export default {
       axios
           .get("/jobs")
           .then((response) => {
-            this.jobs = response.data;
+            this.jobs = response.data; // Jobs ophalen vanuit de backend
           })
           .catch((error) => {
             console.error("Er was een fout bij het ophalen van de jobs!", error);
           });
     },
     goToAddJobPage() {
-      // Navigeren naar de pagina om een nieuwe job toe te voegen
-      this.$router.push('/add-job');
+      if (this.isClient) {
+        this.$router.push("/add-job");
+      } else {
+        alert("Alleen clients mogen jobs toevoegen.");
+      }
     },
     goToEditJobPage(jobId) {
-      // Navigeren naar de EditJob-pagina met de specifieke job-id
-      this.$router.push(`/jobs/${jobId}/edit`);
+      const job = this.jobs.find((job) => job.id === jobId);
+
+      // Controleer of de ingelogde gebruiker de eigenaar van de job is
+      if (job.userEmail === this.loggedInUserEmail) {
+        this.$router.push(`/jobs/${jobId}/edit`);
+      } else {
+        alert("Je mag alleen je eigen jobs bewerken.");
+      }
     },
     showJobDetails(jobId) {
       console.log(`Toon details voor job met ID: ${jobId}`);
     },
     respondToJob(jobId) {
       console.log(`Reageer op job met ID: ${jobId}`);
-    }
-  }
+    },
+  },
 };
 </script>
-
 <style>
 .page-container {
   max-width: 1200px;
