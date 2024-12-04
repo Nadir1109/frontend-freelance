@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import axios from '@/axios'; // Gebruik je geconfigureerde Axios-instantie
+import axios from '@/plugins/axios.js'; // Gebruik je geconfigureerde Axios-instantie
 
 export default {
   data() {

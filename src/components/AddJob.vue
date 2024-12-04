@@ -1,46 +1,54 @@
 <template>
   <div class="add-job-container">
-    <h1>Nieuwe Job Toevoegen</h1>
+
     <form @submit.prevent="submitJob">
-      <label for="title">Titel:</label>
-      <input
-          type="text"
-          v-model="job.title"
-          maxlength="40"
-          id="title"
-          required
-          placeholder="Maximaal 40 karakters"
-      />
+      <div class="form-group">
+        <label for="title">Titel:</label>
+        <input
+            type="text"
+            v-model="job.title"
+            maxlength="40"
+            id="title"
+            required
+            placeholder="Maximaal 40 karakters"
+        />
+      </div>
 
-      <label for="budget">Budget:</label>
-      <input
-          type="number"
-          v-model.number="job.budget"
-          min="0"
-          step="1"
-          id="budget"
-          required
-      />
+      <div class="form-group">
+        <label for="budget">Budget:</label>
+        <input
+            type="number"
+            v-model.number="job.budget"
+            min="0"
+            step="1"
+            id="budget"
+            required
+        />
+      </div>
 
-      <label for="deadline">Deadline:</label>
-      <input
-          type="date"
-          v-model="job.deadline"
-          :min="today"
-          id="deadline"
-          required
-      />
+      <div class="form-group">
+        <label for="deadline">Deadline:</label>
+        <input
+            type="date"
+            v-model="job.deadline"
+            :min="today"
+            id="deadline"
+            required
+        />
+      </div>
 
-      <label for="description">Beschrijving:</label>
-      <textarea v-model="job.description" id="description" required></textarea>
+      <div class="form-group">
+        <label for="description">Beschrijving:</label>
+        <textarea v-model="job.description" id="description" required placeholder="Voeg een omschrijving toe..."></textarea>
+      </div>
 
-      <button type="submit">Job Toevoegen</button>
+      <button type="submit" class="submit-button">Job Toevoegen</button>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/plugins/axios.js'; // Gebruik je axios-configuratie
 
 export default {
   data() {
@@ -55,15 +63,15 @@ export default {
     };
   },
   methods: {
-    submitJob() {
-      axios.post('http://localhost:8080/api/jobs/create', this.job)
-          .then(response => {
-            alert('Job succesvol toegevoegd!');
-            this.$router.push('/jobs');
-          })
-          .catch(error => {
-            console.error("Er is een fout opgetreden bij het toevoegen van de job!", error);
-          });
+    async submitJob() {
+      try {
+        const response = await axios.post('/jobs', this.job);
+        alert('Job succesvol toegevoegd!');
+        this.$router.push('/jobs'); // Ga naar de jobs-overzichtspagina (aanpassen naar jouw route)
+      } catch (error) {
+        console.error("Er is een fout opgetreden bij het toevoegen van de job!", error);
+        alert('Er is iets misgegaan. Controleer de invoer en probeer opnieuw.');
+      }
     }
   }
 };
@@ -72,33 +80,68 @@ export default {
 <style>
 .add-job-container {
   max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: 50px auto;
+  padding: 40px;
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-top: 10px;
+  margin-bottom: 8px;
+  font-size: 1rem;
   font-weight: bold;
+  color: #333;
 }
 
-input, textarea, button {
+input, textarea {
   width: 100%;
-  margin-top: 5px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.3s ease;
 }
 
-button {
-  background-color: #007bff;
+input:focus, textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  height: 120px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4caf50;
   color: white;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #0056b3;
+.submit-button:hover {
+  background-color: #388e3c;
 }
 </style>
