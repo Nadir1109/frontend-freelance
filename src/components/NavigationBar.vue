@@ -30,7 +30,12 @@ export default {
       this.isMenuActive = !this.isMenuActive;
     },
     logout() {
+      // Verwijder alle relevante gegevens uit de localStorage
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userRole');
+
+      // Update de inlogstatus en navigeer naar de loginpagina
       this.isLoggedIn = false;
       this.$router.push('/login');
     }

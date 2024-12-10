@@ -1,6 +1,5 @@
 <template>
   <div class="add-job-container">
-
     <form @submit.prevent="submitJob">
       <div class="form-group">
         <label for="title">Titel:</label>
@@ -66,8 +65,11 @@ export default {
     async submitJob() {
       try {
         const response = await axios.post('/jobs', this.job);
-        alert('Job succesvol toegevoegd!');
-        this.$router.push('/jobs'); // Ga naar de jobs-overzichtspagina (aanpassen naar jouw route)
+        // Alleen de router push zonder query parameters
+        this.$router.push({ name: 'JobsView' });
+
+        // Gebruik localStorage om succesmelding tijdelijk op te slaan
+        localStorage.setItem('successMessage', 'Job succesvol toegevoegd!');
       } catch (error) {
         console.error("Er is een fout opgetreden bij het toevoegen van de job!", error);
         alert('Er is iets misgegaan. Controleer de invoer en probeer opnieuw.');
@@ -77,7 +79,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .add-job-container {
   max-width: 600px;
   margin: 50px auto;

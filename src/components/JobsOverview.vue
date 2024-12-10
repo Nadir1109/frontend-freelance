@@ -18,6 +18,16 @@
         >
           ✏️
         </div>
+
+        <!-- Verwijder icoon alleen tonen als ingelogde gebruiker de eigenaar is -->
+        <div
+            v-if="job.userEmail === loggedInUserEmail"
+            class="delete-icon"
+            @click="showDeleteConfirmation(job.id)"
+        >
+          ❌
+        </div>
+
         <h2>{{ job.title }}</h2>
         <p><strong>Budget:</strong> ${{ job.budget }}</p>
         <p><strong>Deadline:</strong> {{ new Date(job.deadline).toLocaleDateString() }}</p>
@@ -26,17 +36,28 @@
         <button class="more-info-button" @click="showJobDetails(job.id)">
           Meer Informatie
         </button>
-        <button
-            v-if="!isClient"
-            class="respond-job-button"
-            @click="respondToJob(job.id)"
-        >
+        <button v-if="!isClient" class="respond-job-button" @click="respondToJob(job.id)">
           Reageer op Job
         </button>
       </div>
     </div>
+
+    <!-- Modal for Delete Confirmation -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal">
+        <p>Weet je zeker dat je deze job wilt verwijderen?</p>
+        <button @click="deleteJob" class="delete-button" id="delete-red-button">Ja, Verwijderen</button>
+        <button @click="cancelDelete" class="cancel-button">Annuleren</button>
+      </div>
+    </div>
+
+    <!-- Toast message for successful deletion -->
+    <div v-if="showToastSuccess" class="toast success-toast">
+      <p>{{ successMessage }}</p>
+    </div>
   </div>
 </template>
+
 <script>
 import axios from "@/plugins/axios.js";
 
@@ -44,19 +65,36 @@ export default {
   data() {
     return {
       jobs: [],
-      loggedInUserEmail: localStorage.getItem("userEmail"), // Haal ingelogde gebruiker op
-      isClient: localStorage.getItem("userRole") === "CLIENT", // Controleer of de gebruiker een client is
+      loggedInUserEmail: localStorage.getItem("userEmail"),
+      isClient: localStorage.getItem("userRole") === "CLIENT",
+      showModal: false,
+      jobIdToDelete: null,
+      showToastSuccess: false,
+      successMessage: "",
     };
   },
   mounted() {
     this.fetchJobs();
+
+    // Haal de succesmelding uit localStorage, als die er is
+    const successMessage = localStorage.getItem("successMessage");
+    if (successMessage) {
+      this.successMessage = successMessage;
+      this.showToastSuccess = true;
+      setTimeout(() => {
+        this.showToastSuccess = false;
+      }, 3000); // Verberg de toast na 3 seconden
+
+      // Verwijder de succesmelding na weergave
+      localStorage.removeItem("successMessage");
+    }
   },
   methods: {
     fetchJobs() {
       axios
           .get("/jobs")
           .then((response) => {
-            this.jobs = response.data; // Jobs ophalen vanuit de backend
+            this.jobs = response.data;
           })
           .catch((error) => {
             console.error("Er was een fout bij het ophalen van de jobs!", error);
@@ -71,8 +109,6 @@ export default {
     },
     goToEditJobPage(jobId) {
       const job = this.jobs.find((job) => job.id === jobId);
-
-      // Controleer of de ingelogde gebruiker de eigenaar van de job is
       if (job.userEmail === this.loggedInUserEmail) {
         this.$router.push(`/jobs/${jobId}/edit`);
       } else {
@@ -85,10 +121,51 @@ export default {
     respondToJob(jobId) {
       console.log(`Reageer op job met ID: ${jobId}`);
     },
+    showDeleteConfirmation(jobId) {
+      this.jobIdToDelete = jobId;
+      this.showModal = true; // Toon de modal
+    },
+    cancelDelete() {
+      this.showModal = false; // Sluit de modal zonder te verwijderen
+      this.jobIdToDelete = null;
+    },
+    deleteJob() {
+      const job = this.jobs.find((job) => job.id === this.jobIdToDelete);
+      if (job.userEmail === this.loggedInUserEmail) {
+        // Verzoek om job te verwijderen
+        axios
+            .delete(`/jobs/${this.jobIdToDelete}`)
+            .then((response) => {
+              this.jobs = this.jobs.filter((job) => job.id !== this.jobIdToDelete); // Verwijder de job uit de lijst
+              this.showModal = false; // Sluit de modal
+              this.jobIdToDelete = null;
+
+              // Toon de toast
+              this.showToastSuccess = true;
+              this.successMessage = "Job succesvol verwijderd!";
+
+              // Verberg de toast na 3 seconden
+              setTimeout(() => {
+                this.showToastSuccess = false;
+              }, 3000);
+            })
+            .catch((error) => {
+              console.error("Er was een fout bij het verwijderen van de job", error);
+              alert("Er is een fout opgetreden bij het verwijderen van de job.");
+              this.showModal = false; // Sluit de modal bij fout
+              this.jobIdToDelete = null;
+            });
+      } else {
+        alert("Je mag alleen je eigen jobs verwijderen.");
+        this.showModal = false;
+        this.jobIdToDelete = null;
+      }
+    },
   },
 };
 </script>
-<style>
+
+<style scoped>
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -132,21 +209,30 @@ export default {
 }
 
 .job-card {
+  position: relative;
   width: 30%;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 20px;
-  position: relative;
   background: #fff;
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.delete-icon {
+  position: absolute;
+  top: 10px;
+  right: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: red;
 }
 
 .edit-icon {
   position: absolute;
   top: 10px;
   right: 10px;
-  cursor: pointer;
   font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .more-info-button,
@@ -176,5 +262,65 @@ export default {
 
 .respond-job-button:hover {
   background-color: #1c7c31;
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.modal button:nth-child(1) {
+  background-color: #dc3545; /* Red for "Yes" */
+  color: white;
+}
+
+.modal button:nth-child(2) {
+  background-color: red; /* Gray for "Cancel" */
+  color: white;
+}
+
+/* Toast message styling */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #28a745;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  font-size: 16px;
+}
+
+.success-toast {
+  background-color: #28a745; /* Green for success */
 }
 </style>

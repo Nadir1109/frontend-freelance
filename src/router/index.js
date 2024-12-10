@@ -9,10 +9,10 @@ import LoginUser from "@/components/LoginUser.vue";
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
-    { path: '/jobs', name: 'JobsView', component: JobsOverview },
-    { path: '/add-job', name: 'AddJob', component: AddJob },
-    { path: '/jobs/:id/edit', name: 'EditJob', component: EditJob },
-    { path: '/edit/:id', name: 'EditUser', component: EditUser },
+    { path: '/jobs', name: 'JobsView', component: JobsOverview, meta: { requiresAuth: true } },
+    { path: '/add-job', name: 'AddJob', component: AddJob, meta: { requiresAuth: true, role: 'CLIENT' } },
+    { path: '/jobs/:id/edit', name: 'EditJob', component: EditJob, meta: { requiresAuth: true, role: 'CLIENT' } },
+    { path: '/edit/:id', name: 'EditUser', component: EditUser, meta: { requiresAuth: true } },
     { path: '/login', name: 'Login', component: LoginUser, meta: { requiresGuest: true } },
     { path: '/register', name: 'Register', component: RegisterUser, meta: { requiresGuest: true } }
 ];
@@ -21,19 +21,30 @@ const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
 router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('authToken');
     const userRole = localStorage.getItem('userRole');
 
-    if (to.name === 'AddJob' && userRole !== 'CLIENT') {
-        alert('Alleen clients mogen jobs toevoegen.');
-        next({ name: 'JobsView' });
-    } else if (to.name === 'EditJob' && userRole !== 'CLIENT') {
-        alert('Alleen clients mogen jobs bewerken.');
-        next({ name: 'JobsView' });
-    } else {
-        next();
+    // Controleer of de route alleen toegankelijk is voor gasten
+    if (to.meta.requiresGuest && token) {
+        alert('Je bent al ingelogd!');
+        return next({ name: 'Home' });
     }
+
+    // Controleer of de route alleen toegankelijk is voor ingelogde gebruikers
+    if (to.meta.requiresAuth && !token) {
+        alert('Je moet ingelogd zijn om deze pagina te bekijken.');
+        return next({ name: 'Login' });
+    }
+
+    // Controleer de rol voor routes met specifieke rechten
+    if (to.meta.role && userRole !== to.meta.role) {
+        alert(`Alleen gebruikers met de rol ${to.meta.role} hebben toegang.`);
+        return next({ name: 'JobsView' });
+    }
+
+    next();
 });
 
 export default router;
