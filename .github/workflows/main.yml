@@ -1,0 +1,40 @@
+name: Frontend CI
+
+on:
+  push:
+    branches:
+      - main  # Of een andere branch waar je op wilt luisteren (bijv. 'dev')
+  pull_request:
+    branches:
+      - main  # Of een andere branch waar je op wilt luisteren voor PR's
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Stap 1: Haal de code op uit je repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Stap 2: Setup Node.js omgeving
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Of de versie die je gebruikt
+
+      # Stap 3: Installeer de dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Stap 4: Bouw de Vue.js applicatie
+      - name: Build Vue.js app
+        run: npm run build
+
+      # Stap 5: Run Cypress End-to-End tests (zorg dat je tests hebt ingesteld)
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm run serve  # Start je app in de testomgeving
+          wait-on: 'http://localhost:8080'  # Of de URL waarop je front-end draait
+          wait-for: 60  # Wacht maximaal 60 seconden totdat de server draait
