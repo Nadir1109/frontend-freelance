@@ -6,6 +6,7 @@
     "build": "vite build",
     "test:unit": "vue-cli-service test:unit",
     "dev": "vite",
+    "serve": "vite",
     "preview": "vite preview",
     "test": "vue-cli-service test:unit"
   },
