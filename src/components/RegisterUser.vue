@@ -4,24 +4,24 @@
     <form @submit.prevent="registerUser">
       <div>
         <label for="name">Name:</label>
-        <input type="text" v-model="userData.name" required />
+        <input type="text" v-model="userData.name" data-testid="name-input" required />
       </div>
       <div>
         <label for="email">Email:</label>
-        <input type="email" v-model="userData.email" required />
+        <input type="email" v-model="userData.email" data-testid="email-input" required />
       </div>
       <div>
         <label for="password">Password:</label>
-        <input type="password" v-model="userData.password" required />
+        <input type="password" v-model="userData.password" data-testid="password-input" required />
       </div>
       <div>
         <label for="role">Role:</label>
-        <select v-model="userData.role" required>
+        <select v-model="userData.role" data-testid="role-input" required>
           <option value="CLIENT">Client</option>
           <option value="FREELANCER">Freelancer</option>
         </select>
       </div>
-      <button type="submit">Register</button>
+      <button type="submit" data-testid="register-button">Register</button>
     </form>
     <p v-if="message">{{ message }}</p>
   </div>

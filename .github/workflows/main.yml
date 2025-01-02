@@ -3,10 +3,10 @@ name: Frontend CI
 on:
   push:
     branches:
-      - main  # Of een andere branch waar je op wilt luisteren (bijv. 'dev')
+      - master  # Of een andere branch waar je op wilt luisteren (bijv. 'dev')
   pull_request:
     branches:
-      - main  # Of een andere branch waar je op wilt luisteren voor PR's
+      - master  # Of een andere branch waar je op wilt luisteren voor PR's
 
 jobs:
   build:
