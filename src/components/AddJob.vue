@@ -71,9 +71,6 @@ export default {
         const response = await axios.post('/jobs', this.job);
         // Alleen de router push zonder query parameters
         this.$router.push({ name: 'JobsView' });
-
-        // Gebruik localStorage om succesmelding tijdelijk op te slaan
-        localStorage.setItem('successMessage', 'Job succesvol toegevoegd!');
       } catch (error) {
         console.error("Er is een fout opgetreden bij het toevoegen van de job!", error);
         alert('Er is iets misgegaan. Controleer de invoer en probeer opnieuw.');

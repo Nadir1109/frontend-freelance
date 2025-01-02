@@ -27,12 +27,15 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Installer docker compose
       - name: Set up Docker Compose
         uses: docker/setup-buildx-action@v2
 
+      # Start back-end
       - name: Build and run Docker Compose
         run: docker compose up &
 
+      # Wacht totdaty backend draait
       - name: Wait for the backend
         run: npx wait-on http://localhost:9001
 
@@ -45,5 +48,6 @@ jobs:
           wait-on-timeout: 15  # Wacht maximaal 60 seconden totdat de server draait
           config-file: 'cypress.config.js'
 
+      # Stop back-end op einde
       - name: Stop Docker Compose
         run: docker compose down
