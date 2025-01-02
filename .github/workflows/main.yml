@@ -27,13 +27,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Stap 4: Start vue app om de testen uit te voeren
-      - name: Start the application
-        run: npm run dev & # Start de app in de achtergrond
-
-      # Stap 5: Wacht tot vue app draait
-      - name: Wait for the application to be ready
-        run: npx wait-on http://localhost:5173 # Wacht tot de app draait
+#      # Stap 4: Start vue app om de testen uit te voeren
+#      - name: Start the application
+#        run: npm run dev & # Start de app in de achtergrond
+#
+#      # Stap 5: Wacht tot vue app draait
+#      - name: Wait for the application to be ready
+#        run: npx wait-on http://localhost:5173 # Wacht tot de app draait
 
       # Stap 6: Run Cypress End-to-End tests (zorg dat je tests hebt ingesteld)
       - name: Run Cypress tests
