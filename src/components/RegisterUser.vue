@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import axios from '@/plugins/axios.js';
+
 export default {
   data() {
     return {
@@ -43,14 +45,13 @@ export default {
   methods: {
     async registerUser() {
       try {
-        const response = await fetch('http://localhost:8080/api/auth/register', {
+        const response = await axios.post('/auth/register', JSON.stringify(this.userData), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(this.userData),
         });
-        if (response.ok) {
+        if (response.status === 201 || response.status === 200) {
           this.message = 'Registration successful!';
           this.$router.push('/');
         } else {
