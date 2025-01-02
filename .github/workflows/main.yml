@@ -27,14 +27,18 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # Stap 4: Bouw de Vue.js applicatie
-      - name: Build Vue.js app
-        run: npm run build
+      # Stap 4: Start vue app om de testen uit te voeren
+      - name: Start the application
+        run: npm run dev & # Start de app in de achtergrond
 
-      # Stap 5: Run Cypress End-to-End tests (zorg dat je tests hebt ingesteld)
+      # Stap 5: Wacht tot vue app draait
+      - name: Wait for the application to be ready
+        run: npx wait-on http://localhost:5173 # Wacht tot de app draait
+
+      # Stap 6: Run Cypress End-to-End tests (zorg dat je tests hebt ingesteld)
       - name: Run Cypress tests
         uses: cypress-io/github-action@v2
         with:
           start: npm run serve  # Start je app in de testomgeving
-          wait-on: 'http://localhost:8080'  # Of de URL waarop je front-end draait
-          wait-for: 60  # Wacht maximaal 60 seconden totdat de server draait
+          wait-on: 'http://localhost:5173'  # Of de URL waarop je front-end draait
+          wait-on-timeout: 15  # Wacht maximaal 60 seconden totdat de server draait
