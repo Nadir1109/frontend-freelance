@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/api', // Pas dit aan naar jouw backend-URL
-    timeout: 10000, // Optioneel: timeout instellen voor requests
+    baseURL: 'http://localhost:8080/api',
+    timeout: 10000,
 });
 
 instance.interceptors.request.use(
@@ -15,7 +15,7 @@ instance.interceptors.request.use(
         return config;
     },
     (error) => {
-        // Behandel fouten in het verzoek
+
         console.error('Request Interceptor Fout:', error);
         return Promise.reject(error);
     }
@@ -23,7 +23,6 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
     (response) => {
-        // Succesvolle reactie
         return response;
     },
     (error) => {

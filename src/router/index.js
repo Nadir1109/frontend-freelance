@@ -9,7 +9,7 @@ import LoginUser from "@/components/LoginUser.vue";
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
-    { path: '/jobs', name: 'JobsView', component: JobsOverview, meta: { requiresAuth: true } },
+    { path: '/jobs', name: 'JobsView', component: JobsOverview },
     { path: '/add-job', name: 'AddJob', component: AddJob, meta: { requiresAuth: true, role: 'CLIENT' } },
     { path: '/jobs/:id/edit', name: 'EditJob', component: EditJob, meta: { requiresAuth: true, role: 'CLIENT' } },
     { path: '/edit/:id', name: 'EditUser', component: EditUser, meta: { requiresAuth: true } },

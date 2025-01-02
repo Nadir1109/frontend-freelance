@@ -1,6 +1,6 @@
 <template>
-  <div class="add-job-container">
-    <form @submit.prevent="submitJob">
+  <div class="add-job-container" data-testid="add-job-container">
+    <form @submit.prevent="submitJob" data-testid="add-job-form">
       <div class="form-group">
         <label for="title">Titel:</label>
         <input
@@ -10,6 +10,7 @@
             id="title"
             required
             placeholder="Maximaal 40 karakters"
+            data-testid="title-input"
         />
       </div>
 
@@ -22,6 +23,7 @@
             step="1"
             id="budget"
             required
+            data-testid="budget-input"
         />
       </div>
 
@@ -33,18 +35,20 @@
             :min="today"
             id="deadline"
             required
+            data-testid="deadline-input"
         />
       </div>
 
       <div class="form-group">
         <label for="description">Beschrijving:</label>
-        <textarea v-model="job.description" id="description" required placeholder="Voeg een omschrijving toe..."></textarea>
+        <textarea v-model="job.description" id="description" required placeholder="Voeg een omschrijving toe..." data-testid="description-input"></textarea>
       </div>
 
-      <button type="submit" class="submit-button">Job Toevoegen</button>
+      <button type="submit" class="submit-button" data-testid="submit-button">Job Toevoegen</button>
     </form>
   </div>
 </template>
+
 
 <script>
 import axios from '@/plugins/axios.js'; // Gebruik je axios-configuratie

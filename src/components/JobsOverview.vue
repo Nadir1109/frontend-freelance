@@ -1,62 +1,61 @@
 <template>
   <div class="page-container">
-    <h1 class="title">Available Jobs</h1>
+    <h1 class="title" data-testid="page-title">Openstaande Opdrachten</h1>
 
     <!-- Plus icon to add new job -->
-    <div v-if="isClient" class="add-job-container" @click="goToAddJobPage">
+    <div v-if="isClient" class="add-job-container" @click="goToAddJobPage" data-testid="add-job-button">
       <img src="@/assets/img/plus-icon.png" alt="Add Job" class="add-job-icon" />
       <span class="add-job-text">Nieuwe Job Toevoegen</span>
     </div>
 
     <div class="jobs-container">
-      <div v-for="job in jobs" :key="job.id" class="job-card">
-        <!-- Bewerk icoon alleen tonen als ingelogde gebruiker de eigenaar is -->
+      <div v-for="job in jobs" :key="job.id" class="job-card" data-testid="job-card">
         <div
             v-if="job.userEmail === loggedInUserEmail"
             class="edit-icon"
             @click="goToEditJobPage(job.id)"
+            data-testid="edit-job-button"
         >
           ✏️
         </div>
-
-        <!-- Verwijder icoon alleen tonen als ingelogde gebruiker de eigenaar is -->
         <div
             v-if="job.userEmail === loggedInUserEmail"
             class="delete-icon"
             @click="showDeleteConfirmation(job.id)"
+            data-testid="delete-job-button"
         >
           ❌
         </div>
-
-        <h2>{{ job.title }}</h2>
+        <h2 data-testid="job-title">{{ job.title }}</h2>
         <p><strong>Budget:</strong> ${{ job.budget }}</p>
         <p><strong>Deadline:</strong> {{ new Date(job.deadline).toLocaleDateString() }}</p>
         <p>{{ job.description }}</p>
         <p><strong>Gemaakt door:</strong> {{ job.userName }} ({{ job.userEmail }})</p>
-        <button class="more-info-button" @click="showJobDetails(job.id)">
+        <button class="more-info-button" @click="showJobDetails(job.id)" data-testid="more-info-button">
           Meer Informatie
         </button>
-        <button v-if="!isClient" class="respond-job-button" @click="respondToJob(job.id)">
+        <button v-if="!isClient" class="respond-job-button" @click="respondToJob(job.id)" data-testid="respond-job-button">
           Reageer op Job
         </button>
       </div>
     </div>
 
-    <!-- Modal for Delete Confirmation -->
-    <div v-if="showModal" class="modal-overlay">
+
+    <div v-if="showModal" class="modal-overlay" data-testid="delete-modal">
       <div class="modal">
         <p>Weet je zeker dat je deze job wilt verwijderen?</p>
-        <button @click="deleteJob" class="delete-button" id="delete-red-button">Ja, Verwijderen</button>
-        <button @click="cancelDelete" class="cancel-button">Annuleren</button>
+        <button @click="deleteJob" class="delete-button" id="delete-red-button" data-testid="confirm-delete-button">Ja, Verwijderen</button>
+        <button @click="cancelDelete" class="cancel-button" data-testid="cancel-delete-button">Annuleren</button>
       </div>
     </div>
 
-    <!-- Toast message for successful deletion -->
-    <div v-if="showToastSuccess" class="toast success-toast">
+
+    <div v-if="showToastSuccess" class="toast success-toast" data-testid="success-toast">
       <p>{{ successMessage }}</p>
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from "@/plugins/axios.js";
@@ -76,7 +75,6 @@ export default {
   mounted() {
     this.fetchJobs();
 
-    // Haal de succesmelding uit localStorage, als die er is
     const successMessage = localStorage.getItem("successMessage");
     if (successMessage) {
       this.successMessage = successMessage;

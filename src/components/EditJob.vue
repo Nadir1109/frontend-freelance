@@ -1,19 +1,20 @@
 <template>
-  <div class="edit-page-container">
+  <div class="edit-page-container" data-testid="edit-page-container">
     <!-- Terug knop als afbeelding met tekst -->
-    <div class="back-button-container" @click="goBack">
+    <div class="back-button-container" @click="goBack" data-testid="back-button-container">
       <img
           src="@/assets/img/back-arrow.png"
           alt="Terug"
           class="back-button"
+          data-testid="back-button"
       />
-      <span class="back-button-text">Ga terug naar alle opdrachten</span>
+      <span class="back-button-text" data-testid="back-button-text">Ga terug naar alle opdrachten</span>
     </div>
 
-    <h1>Job Bewerken</h1>
-    <form @submit.prevent="updateJob">
-      <div>
-        <label for="title">Titel:</label>
+    <h1 data-testid="edit-job-title">Job Bewerken</h1>
+    <form @submit.prevent="updateJob" data-testid="edit-job-form">
+      <div data-testid="title-field">
+        <label for="title" data-testid="title-label">Titel:</label>
         <input
             id="title"
             v-model="job.title"
@@ -21,11 +22,12 @@
             maxlength="40"
             required
             placeholder="Maximaal 40 karakters"
+            data-testid="title-input"
         />
       </div>
 
-      <div>
-        <label for="budget">Budget:</label>
+      <div data-testid="budget-field">
+        <label for="budget" data-testid="budget-label">Budget:</label>
         <input
             id="budget"
             v-model.number="job.budget"
@@ -33,31 +35,34 @@
             min="1"
             step="1"
             required
+            data-testid="budget-input"
         />
       </div>
 
-      <div>
-        <label for="deadline">Deadline:</label>
+      <div data-testid="deadline-field">
+        <label for="deadline" data-testid="deadline-label">Deadline:</label>
         <input
             id="deadline"
             v-model="job.deadline"
             type="date"
             :min="today"
             required
+            data-testid="deadline-input"
         />
       </div>
 
-      <div>
-        <label for="description">Beschrijving:</label>
+      <div data-testid="description-field">
+        <label for="description" data-testid="description-label">Beschrijving:</label>
         <textarea
             id="description"
             v-model="job.description"
             rows="5"
             required
+            data-testid="description-input"
         ></textarea>
       </div>
 
-      <button type="submit" class="save-button">Opslaan</button>
+      <button type="submit" class="save-button" data-testid="save-button">Opslaan</button>
     </form>
   </div>
 </template>

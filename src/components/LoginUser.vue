@@ -10,6 +10,7 @@
               placeholder="Email"
               required
               class="input-field"
+              data-testid="email-input"
           />
           <input
               type="password"
@@ -17,14 +18,16 @@
               placeholder="Wachtwoord"
               required
               class="input-field"
+              data-testid="password-input"
           />
         </div>
-        <button type="submit" class="submit-button">Inloggen</button>
+        <button type="submit" class="submit-button" data-testid="login-button">Inloggen</button>  <!-- Toegevoegd data-testid -->
       </form>
       <p v-if="error" class="error-message">{{ error }}</p>
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from '@/plugins/axios.js';
