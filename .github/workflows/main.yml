@@ -42,4 +42,4 @@ jobs:
           start: npm run serve  # Start je app in de testomgeving
           wait-on: 'http://localhost:5173'  # Of de URL waarop je front-end draait
           wait-on-timeout: 15  # Wacht maximaal 60 seconden totdat de server draait
-          config-file: 'cypress.config.json'
+          config-file: 'cypress.config.js'
