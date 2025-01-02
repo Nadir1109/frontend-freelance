@@ -33,13 +33,6 @@ jobs:
       - name: Build and run Docker Compose
         run: docker compose up &
 
-      - name: Wait for the application to be ready
-        run: |
-          until curl -s http://localhost:8080 > /dev/null; do
-            echo "Waiting for app to start...";
-            sleep 3;
-          done
-
       # Stap 6: Run Cypress End-to-End tests (zorg dat je tests hebt ingesteld)
       - name: Run Cypress tests
         uses: cypress-io/github-action@v2
