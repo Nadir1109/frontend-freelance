@@ -32,7 +32,7 @@
         <p>{{ job.description }}</p>
         <p><strong>Gemaakt door:</strong> {{ job.userName }} ({{ job.userEmail }})</p>
         <button class="more-info-button" @click="showJobDetails(job.id)" data-testid="more-info-button">
-          Meer Informatie
+          klik voor meer Informatie
         </button>
         <button v-if="!isClient" class="respond-job-button" @click="respondToJob(job.id)" data-testid="respond-job-button">
           Reageer op Job
