@@ -10,6 +10,7 @@
         <router-link to="/profile" class="nav-link">Profiel</router-link>
         <router-link to="/settings" class="nav-link">Instellingen</router-link>
         <router-link v-if="!isLoggedIn" to="/login" class="nav-link">Login</router-link>
+        <router-link v-if="!isLoggedIn" to="/register" class="nav-link">Registeren</router-link>
         <a v-if="isLoggedIn" @click="logout" class="nav-link-logout">Uitloggen</a>
       </div>
     </div>
