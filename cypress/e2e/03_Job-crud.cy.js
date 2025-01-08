@@ -38,6 +38,8 @@ describe('Login, Add Job, Edit Job and Delete Job Test', () => {
     cy.contains('Bewerkte job beschrijving.').should('be.visible');
 
     // Delete the Job
+
+    cy.wait(5000);
     cy.get('[data-testid="delete-job-button"]').first().click(); // Klik op de delete knop
     cy.get('[data-testid="confirm-delete-button"]').click(); // Klik op "Ja, Verwijderen"
 
