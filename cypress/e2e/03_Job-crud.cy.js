@@ -16,8 +16,6 @@ describe('Login, Add Job, Edit Job and Delete Job Test', () => {
     cy.get('[data-testid="description-input"]').type('Job beschrijving voor de test.');
     cy.get('[data-testid="submit-button"]').click();
     cy.url().should('include', '/jobs');
-
-    // Validatie toevoegen
     cy.contains('Nieuwe Job Titel').should('be.visible');
     cy.contains('Budget: $1000').should('be.visible');
     cy.contains('Deadline: 31-12-2026').should('be.visible');
@@ -30,20 +28,20 @@ describe('Login, Add Job, Edit Job and Delete Job Test', () => {
     cy.get('[data-testid="deadline-input"]').clear().type('2026-12-31');
     cy.get('[data-testid="description-input"]').clear().type('Bewerkte job beschrijving.');
     cy.get('[data-testid="edited-save-button"]').click();
-
-    // Controleer de wijzigingen
     cy.contains('Bewerkte Job Titel').should('be.visible');
     cy.contains('Budget: $1500').should('be.visible');
     cy.contains('Deadline: 31-12-2026').should('be.visible');
     cy.contains('Bewerkte job beschrijving.').should('be.visible');
 
     // Delete the Job
-
-    cy.wait(5000);
+    cy.intercept('DELETE', '/jobs/*').as('deleteJob'); // Intercept de DELETE-aanroep
     cy.get('[data-testid="delete-job-button"]').first().click(); // Klik op de delete knop
+    cy.log('Clicked delete button');
     cy.get('[data-testid="confirm-delete-button"]').click(); // Klik op "Ja, Verwijderen"
+    cy.log('Clicked confirm button');
 
-    // Controleer of de job niet meer bestaat
+
+    // Valideer dat de job niet meer bestaat
     cy.contains('Bewerkte Job Titel').should('not.exist');
   });
 });

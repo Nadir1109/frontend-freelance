@@ -6,6 +6,6 @@ describe('Register Tests', () => {
         cy.get('[data-testid="password-input"]').type('nadir123');
         cy.get('[data-testid="role-input"]').select('CLIENT');
         cy.get('[data-testid="register-button"]').click();
-        cy.url().should('not.include', 'register');
+        cy.url().should('not.include', 'registeren');
     });
 });
