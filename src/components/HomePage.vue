@@ -8,7 +8,7 @@
       <p><strong>Rol:</strong> {{ userRole }}</p>
     </div>
     <div v-else>
-      <p>Log in om uw gegevens te bekijken.</p>
+      <p>Log in om uw gegevens te bekijken en op opdrachten te reageren</p>
       <button @click="redirectToLogin">Ga naar inloggen</button>
     </div>
   </div>
