@@ -28,7 +28,7 @@
         </div>
         <h2 data-testid="job-title">{{ job.title }}</h2>
         <p><strong>Budget:</strong> ${{ job.budget }}</p>
-        <p><strong>Deadline:</strong> {{ new Date(job.deadline).toLocaleDateString() }}</p>
+        <p><strong>Deadline:</strong> {{ new Date(job.deadline).toLocaleDateString('nl-NL') }}</p>
         <p>{{ job.description }}</p>
         <p><strong>Gemaakt door:</strong> {{ job.userName }} ({{ job.userEmail }})</p>
         <button class="more-info-button" @click="showJobDetails(job.id)" data-testid="more-info-button">
