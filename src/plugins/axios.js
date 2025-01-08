@@ -28,7 +28,7 @@ instance.interceptors.response.use(
     (error) => {
         // Controleer op 401 (Unauthorized) en onderneem actie, bijvoorbeeld uitloggen
         if (error.response && error.response.status === 401) {
-            console.error('Niet geautoriseerd! Token is ongeldig of verlopen.');
+            console.error('Niet geautoriseerd! Token is ongeldig of verlopen of verkeerde wachtwoord.');
             // Verwijder het token zonder de pagina opnieuw te laden
             localStorage.removeItem('authToken');
         }
