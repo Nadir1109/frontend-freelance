@@ -51,7 +51,7 @@
 
 
 <script>
-import axios from '@/plugins/axios.js'; // Gebruik je axios-configuratie
+import axios from '@/plugins/axios.js';
 
 export default {
   data() {
@@ -69,7 +69,6 @@ export default {
     async submitJob() {
       try {
         const response = await axios.post('/jobs', this.job);
-        // Alleen de router push zonder query parameters
         this.$router.push({ name: 'JobsView' });
       } catch (error) {
         console.error("Er is een fout opgetreden bij het toevoegen van de job!", error);

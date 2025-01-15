@@ -1,17 +1,16 @@
 <template>
   <nav class="navbar">
     <div class="nav-container">
-      <!-- Freelance-Platform logo link aan de linkerkant -->
-      <a href="/" class="nav-logo">Freelance-Platform</a>
-
-      <!-- Navigation items - toegevoegd aan de rechterkant -->
-      <div class="nav-links">
+      <div class="nav-left">
+        <a href="/" class="nav-logo">Freelance-Platform</a>
         <router-link to="/jobs" class="nav-link">Opdrachten</router-link>
         <router-link to="/profile" class="nav-link">Profiel</router-link>
         <router-link to="/settings" class="nav-link">Instellingen</router-link>
+      </div>
+      <div class="nav-right">
         <router-link v-if="!isLoggedIn" to="/login" class="nav-link">Login</router-link>
         <router-link v-if="!isLoggedIn" to="/register" class="nav-link">Registeren</router-link>
-        <a v-if="isLoggedIn" @click="logout" class="nav-link-logout">Uitloggen</a>
+        <a v-if="isLoggedIn" @click="logout" class="nav-link logout">Uitloggen</a>
       </div>
     </div>
   </nav>
@@ -47,13 +46,26 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: #007bff;
+  background-color: #0070cc; /* Coolblue blauw */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
   display: flex;
   justify-content: space-between;
   width: 100%;
+}
+
+.nav-left {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
 }
 
 .nav-logo {
@@ -63,55 +75,52 @@ export default {
   text-decoration: none;
 }
 
-.nav-links {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
 .nav-link {
-  color: #ecf0f1; /* Lichtgrijs voor de tekst */
+  color: white;
   text-decoration: none;
   font-size: 1.1rem;
+  transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  text-decoration: underline;
+  background-color: #3ba1f5;
+  color: black;/* Oranje bij hover */
+
 }
 
- .nav-link-logout {
-  background-color: #E74C3C; /* Rood-oranje */
+.logout {
+  background-color: #0070cc; /* Oranje */
   color: white;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 5px;
   transition: background-color 0.3s ease, transform 0.2s ease;
   text-decoration: none;
-  display: inline-block;
+  cursor: pointer;
 }
 
-.nav-link-logout:hover {
-  background-color: #C0392B; /* Donkerder bij hover */
+.logout:hover {
+  background-color: lightcyan; /* Donkerder oranje bij hover */
   transform: scale(1.05);
 }
-.nav-link-logout:active
-{
+
+.logout:active {
   transform: scale(0.98);
 }
 
 @media (max-width: 768px) {
-  .nav-links {
+  .nav-left, .nav-right {
     display: none;
   }
 
-  .nav-links.active {
+  .nav-left.active, .nav-right.active {
     display: flex;
     flex-direction: column;
     position: absolute;
     top: 60px;
     right: 0;
-    background-color: #2980b9; /* Donkerblauw voor mobiele versie */
-    width: 200px;
+    background-color: #0070cc; /* Blauw voor mobiele versie */
+    width: 100%;
     padding: 20px;
   }
 }

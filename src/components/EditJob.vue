@@ -69,6 +69,7 @@
 
 <script>
 import axios from "@/plugins/axios.js";
+import { useToast } from "vue-toastification"; // Zorg dat Vue Toastification is geïnstalleerd
 
 export default {
   data() {
@@ -79,7 +80,8 @@ export default {
         deadline: "",
         description: ""
       },
-      today: new Date().toISOString().split("T")[0] // Alleen toekomstgerichte datums
+      today: new Date().toISOString().split("T")[0], // Alleen toekomstgerichte datums
+      toast: useToast(),
     };
   },
   mounted() {
@@ -99,12 +101,12 @@ export default {
       axios
           .put(`/jobs/${this.job.id}`, this.job)
           .then(() => {
-            alert("Job succesvol bijgewerkt!");
+            this.toast.success("Job succesvol bijgewerkt!"); // Gebruik een toast in plaats van een alert
             this.$router.push("/jobs"); // Ga terug naar de lijstweergave
           })
           .catch(error => {
             console.error("Fout bij het bijwerken van de job!", error);
-            alert("Er is een fout opgetreden. Controleer de invoer en probeer opnieuw.");
+            this.toast.error("Er is een fout opgetreden. Controleer de invoer en probeer opnieuw.");
           });
     },
     goBack() {
@@ -114,7 +116,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .edit-page-container {
   max-width: 600px;
   margin: 30px auto;
