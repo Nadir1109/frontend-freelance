@@ -33,7 +33,7 @@ jobs:
 
       # Start back-end
       - name: Build and run Docker Compose
-        run: docker compose -f docker-compose-test up &
+        run: docker compose -f docker-compose-test.yml up &
 
       # Wacht totdaty backend draait
       - name: Wait for the backend
