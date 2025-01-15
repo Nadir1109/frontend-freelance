@@ -33,7 +33,7 @@ jobs:
 
       # Start back-end
       - name: Build and run Docker Compose
-        run: docker compose up &
+        run: docker compose -f docker-compose-test up &
 
       # Wacht totdaty backend draait
       - name: Wait for the backend
@@ -51,3 +51,47 @@ jobs:
       # Stop back-end op einde
       - name: Stop Docker Compose
         run: docker compose down
+
+      # Build dockerfile
+      - name: build dockerfile
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/freelance-front-end:latest .
+
+      # Push to docker-hub
+      - name: login into docker-hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: push to docker-hub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/freelance-front-end:latest
+
+      # Transfer docker compose production file
+      - name: transfer docker-compose file
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: 81.17.103.220
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_KEY }}
+          source: "./docker-compose-production.yml"
+          target: "/root/Projects/FreelanceFrontEnd"
+
+      # Deploy production
+      - name: deploy in production
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: 81.17.103.220
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_KEY }}
+          script: |
+            # stop container
+            docker container stop $(docker ps -a | grep nadir203/freelance-front-end:latest | awk '{print $1}')
+            # delete all stopped containers
+            docker container prune -f
+            # delete old image
+            docker image rm nadir203/freelance-front-end:latest
+            # pull new image
+            docker pull nadir203/freelance-front-end:latest
+            # navigate to docker-compose file
+            cd Projects/FreelanceFrontEnd
+            # run new image
+            docker compose -f docker-compose-production.yml up -d

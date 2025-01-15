@@ -1,0 +1,11 @@
+services:
+  freelance-back-end:
+    image: nadir203/freelance-front-end:latest
+    container_name: freelance-front-end
+    ports:
+      - 3001:80
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
