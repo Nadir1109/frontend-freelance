@@ -50,7 +50,7 @@ jobs:
 
       # Stop back-end op einde
       - name: Stop Docker Compose
-        run: docker compose down
+        run: docker compose -f docker-compose-test.yml down
 
       # Build dockerfile
       - name: build dockerfile
