@@ -108,6 +108,13 @@ jobs:
 
       # mobile
       - name: lighthouse desktop audit
-        run: npm run lhci:desktop
+        run: npm run lhci:desktop -> > desktop-report.html
         env:
           LHCI_GITHUB_APP_TOKEN: FwIDGBxS:59665993:odNpssPHlUQXe72l
+
+      - name: Upload Reports as Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: lighthouse-reports
+          path: |
+            desktop-report.html
