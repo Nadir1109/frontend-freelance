@@ -7,5 +7,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:h2:mem:test-db
       SPRING_DATASOURCE_USERNAME: nadir
       SPRING_DATASOURCE_PASSWORD: nadir
+      SPRING_FLYWAY_ENABLED: true
     ports:
       - 9001:8080
