@@ -108,7 +108,7 @@ jobs:
 
       # mobile
       - name: lighthouse desktop audit
-        run: npm run lhci:desktop -> > desktop-report.html
+        run: npm run lhci:desktop > desktop-report.html
         env:
           LHCI_GITHUB_APP_TOKEN: FwIDGBxS:59665993:odNpssPHlUQXe72l
 
