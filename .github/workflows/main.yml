@@ -102,13 +102,13 @@ jobs:
 
       # mobile
       - name: lighthouse mobile audit
-        run: npm run lhci:mobile
+        run: npm run lhci:mobile > mobile-report.html
         env:
           LHCI_GITHUB_APP_TOKEN: FwIDGBxS:59665993:odNpssPHlUQXe72l
 
       # mobile
       - name: lighthouse desktop audit
-        run: npm run lhci:desktop
+        run: npm run lhci:desktop > desktop-report.html
         env:
           LHCI_GITHUB_APP_TOKEN: FwIDGBxS:59665993:odNpssPHlUQXe72l
 
@@ -116,4 +116,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-reports
-          path: .lighthouseci/
+          path: |
+            desktop-report.html
+            mobile-report.html
