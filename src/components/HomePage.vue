@@ -13,7 +13,10 @@
           <li><strong>Betrouwbaar:</strong> Werk samen met gescreende professionals.</li>
           <li><strong>Flexibel:</strong> Vind opdrachten of freelancers op jouw voorwaarden.</li>
         </ul>
-        <button @click="redirectToLogin" class="cta-button">Inloggen</button>
+        <div class="button-group">
+          <button @click="redirectToLogin" class="cta-button">Inloggen</button>
+          <button @click="redirectToRegister" class="cta-button register-button">Registreren</button>
+        </div>
       </div>
       <img src="../assets/img/freelance-collab.jpeg" alt="Freelancers collaborating" class="welcome-image" />
     </section>
@@ -37,7 +40,7 @@
 <script>
 import axios from "@/plugins/axios.js";
 import NotificationBox from "@/components/NotificationBox.vue";
-import { useToast } from "vue-toastification";
+import {useToast} from "vue-toastification";
 
 export default {
   components: {
@@ -156,6 +159,12 @@ export default {
   border-radius: 10px;
 }
 
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
 .cta-button {
   background-color: #ff8800;
   color: white;
@@ -169,6 +178,14 @@ export default {
 
 .cta-button:hover {
   background-color: #cc6e00;
+}
+
+.register-button {
+  background-color: #00cc88;
+}
+
+.register-button:hover {
+  background-color: #008855;
 }
 
 .redirect-section {
