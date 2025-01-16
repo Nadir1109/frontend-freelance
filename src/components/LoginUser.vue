@@ -24,10 +24,12 @@
         <button type="submit" class="submit-button" data-testid="login-button">Inloggen</button>  <!-- Toegevoegd data-testid -->
       </form>
       <p v-if="error" class="error-message">{{ error }}</p>
+      <p class="register-prompt">
+        Heb je geen account? <button @click="redirectToRegister" class="register-button">Maak hier een gratis account aan</button>
+      </p>
     </div>
   </div>
 </template>
-
 
 <script>
 import axios from '@/plugins/axios.js';
@@ -63,6 +65,9 @@ export default {
           this.error = 'Er is een onbekende fout opgetreden.';
         }
       }
+    },
+    redirectToRegister() {
+      this.$router.push('/register');
     },
   },
 };
@@ -132,6 +137,26 @@ h1.title {
   text-align: center;
   font-size: 14px;
   margin-top: 10px;
+}
+
+.register-prompt {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.register-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.register-button:hover {
+  color: #0056b3;
 }
 
 @keyframes slideInTop {
