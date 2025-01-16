@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'  # Of de versie die je gebruikt
+          node-version: '22'  # Of de versie die je gebruikt
 
       # Stap 3: Installeer de dependencies
       - name: Install dependencies
