@@ -8,7 +8,9 @@
     "dev": "vite",
     "serve": "vite --mode cicd",
     "preview": "vite preview",
-    "test": "vue-cli-service test:unit"
+    "test": "vue-cli-service test:unit",
+    "lhci:mobile": "lhci autorun",
+    "lhci:desktop": "lhci autorun --collect.settings.preset=desktop"
   },
   "dependencies": {
     "@lhci/cli": "^0.14.0",
