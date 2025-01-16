@@ -97,7 +97,7 @@ jobs:
             docker compose -f docker-compose-production.yml up -d
 
       # Wacht totdaty web-app draait
-      - name: Wait for the backend
+      - name: Wait for the production app
         run: npx wait-on http://81.17.103.220:3001
 
       # Lighthouse performance test
