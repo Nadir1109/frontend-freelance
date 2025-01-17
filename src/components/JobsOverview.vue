@@ -34,9 +34,9 @@
         <button class="more-info-button" @click="showJobDetails(job.id)" data-testid="more-info-button">
           klik voor meer Informatie
         </button>
-        <button v-if="!isClient" class="respond-job-button" @click="respondToJob(job.id)" data-testid="respond-job-button">
+<!--        <button v-if="!isClient" class="respond-job-button" @click="respondToJob(job.id)" data-testid="respond-job-button">
           Reageer op Job
-        </button>
+        </button>-->
       </div>
     </div>
 
